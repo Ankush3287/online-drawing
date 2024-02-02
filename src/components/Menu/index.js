@@ -7,10 +7,10 @@ import {menuItemClick, actionItemClick} from '@/slice/menuSlice'
 import cx from 'classnames'
 
 const Menu = () => {
-  const dipatch = useDispatch();
+  const dispatch = useDispatch();
   const activeMenuItem = useSelector((state)=> state.menu.activeMenuItem);
   const handleMenuClick =(itemName)=>{
-    dipatch(menuItemClick(itemName))
+    dispatch(menuItemClick(itemName))
   }
   return (
     <div className={styles.menuContainer}>
