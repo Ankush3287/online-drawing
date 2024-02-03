@@ -3,6 +3,7 @@ import { COLORS, MENU_ITEMS } from '@/constants'
 import {useDispatch,useSelector} from 'react-redux'
 import { changeColor, changeBrushSize } from '@/slice/toolBoxSlice'
 import cx from 'classnames';
+import { socket } from "@/socket";
 
 
 const Toolbox = () => {
@@ -12,10 +13,12 @@ const Toolbox = () => {
     const showStrokeToolOption = activeMenuItem===MENU_ITEMS.PENCIL;
     const showBrushToolOption = activeMenuItem===MENU_ITEMS.PENCIL || activeMenuItem===MENU_ITEMS.ERASER;
     const updateBrushSize = (e) =>{
-        dispatch(changeBrushSize({item: activeMenuItem, size: e.target.value}))
+        dispatch(changeBrushSize({item: activeMenuItem, size: e.target.value}));
+        socket.emit('changeConfig', {color, size: e.target.value});
     }
     const updateColor = (newColor) =>{
-        dispatch(changeColor({item: activeMenuItem, color: newColor}))
+        dispatch(changeColor({item: activeMenuItem, color: newColor}));
+        socket.emit('changeConfig', {color:newColor, size});
     }
   return (
     <div className={styles.toolboxContainer}>
