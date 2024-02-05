@@ -4,6 +4,7 @@ import {useDispatch,useSelector} from 'react-redux'
 import { changeColor, changeBrushSize } from '@/slice/toolBoxSlice'
 import cx from 'classnames';
 import { socket } from "@/socket";
+import { useEffect } from 'react';
 
 
 const Toolbox = () => {
@@ -20,6 +21,16 @@ const Toolbox = () => {
         dispatch(changeColor({item: activeMenuItem, color: newColor}));
         socket.emit('changeConfig', {color:newColor, size});
     }
+    useEffect(()=>{
+        const handleChangeConfig = (config)=>{
+            dispatch(changeBrushSize({item: activeMenuItem, size: config.size}));
+            dispatch(changeColor({item: activeMenuItem, color: config.color}));
+        }
+        socket.on('changeConfig', handleChangeConfig);
+        return () => {
+            socket.off('changeConfig', handleChangeConfig);
+        }
+    },[color,size]);
   return (
     <div className={styles.toolboxContainer}>
         {showStrokeToolOption &&         <div className={styles.toolItem}>
